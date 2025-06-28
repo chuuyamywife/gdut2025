@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AGVController : MonoBehaviour
 {
@@ -7,20 +7,20 @@ public class AGVController : MonoBehaviour
 
     void Start()
     {
-        // Ïòµ÷¶ÈÆ÷×¢²á
+        // å‘è°ƒåº¦å™¨æ³¨å†Œ
         scheduler.AddAGV(agvId, transform.position, 100f);
     }
 
     void Update()
     {
-        // ´Óµ÷¶ÈÆ÷»ñÈ¡×îĞÂÎ»ÖÃ
+        // ä»è°ƒåº¦å™¨è·å–æœ€æ–°ä½ç½®
         if (scheduler.agvData.ContainsKey(agvId))
         {
             transform.position = scheduler.agvData[agvId].position;
         }
     }
 
-    // ´ÓUIµ÷ÓÃÌí¼ÓÈÎÎñ
+    // ä»UIè°ƒç”¨æ·»åŠ ä»»åŠ¡
     public void AssignTask(TaskType taskType, Vector3 target)
     {
         scheduler.AddNewTask(agvId, taskType, target);

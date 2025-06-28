@@ -4,45 +4,45 @@ using UnityEngine;
 
 public class TaskScheduler : MonoBehaviour
 {
-    // ÅäÖÃ²ÎÊı£¨¿ÉÔÚUnity InspectorÖĞµ÷Õû£©
-    [Header("ÈÎÎñÅäÖÃ")]
+    // é…ç½®å‚æ•°ï¼ˆå¯åœ¨Unity Inspectorä¸­è°ƒæ•´ï¼‰
+    [Header("ä»»åŠ¡é…ç½®")]
     [Range(10, 30)] public float batteryThreshold = 15f;
-    public float batteryDrainRate = 0.5f; // Ã¿ÃëµçÁ¿ÏûºÄ°Ù·Ö±È
+    public float batteryDrainRate = 0.5f; // æ¯ç§’ç”µé‡æ¶ˆè€—ç™¾åˆ†æ¯”
 
-    [Header("ÒÀÀµÄ£¿é")]
-    public PathPlanner pathPlanner;      // Í¬Ñ§BµÄÂ·¾¶¹æ»®
-    public FaultManager faultManager;    // Í¬Ñ§DµÄ¹ÊÕÏÏµÍ³
-    public AGVUIManager uiManager;       // Å®Í¬Ñ§µÄUI
+    [Header("ä¾èµ–æ¨¡å—")]
+    public PathPlanner pathPlanner;      // åŒå­¦Bçš„è·¯å¾„è§„åˆ’
+    public FaultManager faultManager;    // åŒå­¦Dçš„æ•…éšœç³»ç»Ÿ
+    public AGVUIManager uiManager;       // å¥³åŒå­¦çš„UI
 
-    // AGVÊı¾İ´æ´¢
+    // AGVæ•°æ®å­˜å‚¨
     private Dictionary<int, AGVData> agvData = new Dictionary<int, AGVData>();
     private Queue<TaskCommand> globalTaskQueue = new Queue<TaskCommand>();
 
     void Start()
     {
-        // ×¢²á¹ÊÕÏ»Øµ÷
+        // æ³¨å†Œæ•…éšœå›è°ƒ
         if (faultManager != null)
         {
             faultManager.OnFaultOccurred += HandleFaultEvent;
         }
 
-        // ³õÊ¼»¯²âÊÔAGV
+        // åˆå§‹åŒ–æµ‹è¯•AGV
         AddAGV(1, new Vector3(0, 0, 0), 100f);
     }
 
     void Update()
     {
-        // ¸üĞÂËùÓĞAGV×´Ì¬
+        // æ›´æ–°æ‰€æœ‰AGVçŠ¶æ€
         foreach (var agv in agvData.Values)
         {
             UpdateAGVState(agv);
         }
 
-        // ´¦ÀíÈÎÎñ¶ÓÁĞ
+        // å¤„ç†ä»»åŠ¡é˜Ÿåˆ—
         ProcessTaskQueue();
     }
 
-    // Ìí¼ÓĞÂAGV
+    // æ·»åŠ æ–°AGV
     public void AddAGV(int id, Vector3 startPos, float startBattery)
     {
         agvData[id] = new AGVData
@@ -55,7 +55,7 @@ public class TaskScheduler : MonoBehaviour
         };
     }
 
-    // Ìí¼ÓĞÂÈÎÎñ£¨´ÓUIµ÷ÓÃ£©
+    // æ·»åŠ æ–°ä»»åŠ¡ï¼ˆä»UIè°ƒç”¨ï¼‰
     public void AddNewTask(int agvId, TaskType taskType, Vector3 target)
     {
         if (!agvData.ContainsKey(agvId)) return;
@@ -70,18 +70,18 @@ public class TaskScheduler : MonoBehaviour
 
         agv.taskQueue.Enqueue(newTask);
 
-        // ¸üĞÂUI
+        // æ›´æ–°UI
         uiManager.UpdateTaskList(agvId, agv.taskQueue);
     }
 
-    // ¸üĞÂAGV×´Ì¬
+    // æ›´æ–°AGVçŠ¶æ€
     private void UpdateAGVState(AGVData agv)
     {
-        // ÏûºÄµçÁ¿
+        // æ¶ˆè€—ç”µé‡
         agv.battery -= batteryDrainRate * Time.deltaTime;
         agv.battery = Mathf.Clamp(agv.battery, 0, 100);
 
-        // µÍµçÁ¿¼ì²â
+        // ä½ç”µé‡æ£€æµ‹
         if (agv.battery < batteryThreshold &&
             agv.currentTask != TaskType.Charging &&
             !HasChargingTask(agv))
@@ -89,11 +89,11 @@ public class TaskScheduler : MonoBehaviour
             InsertChargingTask(agv);
         }
 
-        // ¸üĞÂUIÏÔÊ¾
+        // æ›´æ–°UIæ˜¾ç¤º
         uiManager.UpdateAGVStatus(agv.id, agv.battery, agv.currentTask);
     }
 
-    // ´¦Àí¹ÊÕÏÊÂ¼ş
+    // å¤„ç†æ•…éšœäº‹ä»¶
     private void HandleFaultEvent(int nodeId)
     {
         foreach (var agv in agvData.Values)
@@ -101,19 +101,19 @@ public class TaskScheduler : MonoBehaviour
             if (agv.currentTask != TaskType.Idle &&
                 PathContainsNode(agv.currentTask.path, nodeId))
             {
-                // ÖØĞÂ¹æ»®Â·¾¶
+                // é‡æ–°è§„åˆ’è·¯å¾„
                 agv.currentTask.path = pathPlanner.FindPathAvoiding(
                     agv.position,
                     agv.currentTask.targetPosition,
                     new int[] { nodeId }
                 );
 
-                Debug.Log($"AGV{agv.id} Â·¾¶ÖØ¹æ»®£¬±Ü¿ª¹ÊÕÏ½Úµã {nodeId}");
+                Debug.Log($"AGV{agv.id} è·¯å¾„é‡è§„åˆ’ï¼Œé¿å¼€æ•…éšœèŠ‚ç‚¹ {nodeId}");
             }
         }
     }
 
-    // ²åÈë³äµçÈÎÎñ
+    // æ’å…¥å……ç”µä»»åŠ¡
     private void InsertChargingTask(AGVData agv)
     {
         Vector3 nearestCharger = FindNearestChargingStation(agv.position);
@@ -126,7 +126,7 @@ public class TaskScheduler : MonoBehaviour
             isPriority = true
         };
 
-        // ÓÅÏÈ²åÈë¶ÓÁĞ×îÇ°Ãæ
+        // ä¼˜å…ˆæ’å…¥é˜Ÿåˆ—æœ€å‰é¢
         var tempQueue = new Queue<TaskCommand>();
         tempQueue.Enqueue(chargingTask);
 
@@ -137,24 +137,24 @@ public class TaskScheduler : MonoBehaviour
 
         agv.taskQueue = tempQueue;
 
-        Debug.Log($"AGV{agv.id} µçÁ¿µÍ£¬²åÈë³äµçÈÎÎñ");
+        Debug.Log($"AGV{agv.id} ç”µé‡ä½ï¼Œæ’å…¥å……ç”µä»»åŠ¡");
     }
 
-    // Ñ°ÕÒ×î½ü³äµçÕ¾
+    // å¯»æ‰¾æœ€è¿‘å……ç”µç«™
     private Vector3 FindNearestChargingStation(Vector3 currentPos)
     {
-        // Êµ¼ÊÏîÄ¿ÖĞ´ÓµØÍ¼Êı¾İ»ñÈ¡
-        return new Vector3(10, 0, 10); // Ê¾ÀıÎ»ÖÃ
+        // å®é™…é¡¹ç›®ä¸­ä»åœ°å›¾æ•°æ®è·å–
+        return new Vector3(10, 0, 10); // ç¤ºä¾‹ä½ç½®
     }
 
-    // ¼ì²éÂ·¾¶ÊÇ·ñ°üº¬¹ÊÕÏ½Úµã
+    // æ£€æŸ¥è·¯å¾„æ˜¯å¦åŒ…å«æ•…éšœèŠ‚ç‚¹
     private bool PathContainsNode(List<Vector3> path, int nodeId)
     {
-        // Êµ¼ÊÏîÄ¿ÖĞ¸ù¾İ½ÚµãID¼ì²é
+        // å®é™…é¡¹ç›®ä¸­æ ¹æ®èŠ‚ç‚¹IDæ£€æŸ¥
         return false;
     }
 
-    // ´¦ÀíÈÎÎñ¶ÓÁĞ
+    // å¤„ç†ä»»åŠ¡é˜Ÿåˆ—
     private void ProcessTaskQueue()
     {
         foreach (var agv in agvData.Values)
@@ -167,12 +167,12 @@ public class TaskScheduler : MonoBehaviour
         }
     }
 
-    // Ö´ĞĞÈÎÎñĞ­³Ì
+    // æ‰§è¡Œä»»åŠ¡åç¨‹
     private IEnumerator ExecuteTask(AGVData agv, TaskCommand task)
     {
-        Debug.Log($"AGV{agv.id} ¿ªÊ¼Ö´ĞĞÈÎÎñ: {task.type}");
+        Debug.Log($"AGV{agv.id} å¼€å§‹æ‰§è¡Œä»»åŠ¡: {task.type}");
 
-        // Êµ¼ÊÒÆ¶¯Âß¼­
+        // å®é™…ç§»åŠ¨é€»è¾‘
         foreach (var point in task.path)
         {
             while (Vector3.Distance(agv.position, point) > 0.1f)
@@ -182,18 +182,18 @@ public class TaskScheduler : MonoBehaviour
             }
         }
 
-        // ÈÎÎñÍê³É´¦Àí
+        // ä»»åŠ¡å®Œæˆå¤„ç†
         if (task.type == TaskType.Charging)
         {
-            agv.battery = 100f; // ³äÂúµç
+            agv.battery = 100f; // å……æ»¡ç”µ
         }
 
-        Debug.Log($"AGV{agv.id} Íê³ÉÈÎÎñ: {task.type}");
+        Debug.Log($"AGV{agv.id} å®Œæˆä»»åŠ¡: {task.type}");
         agv.currentTask = TaskType.Idle;
     }
 }
 
-// AGVÊı¾İ½á¹¹
+// AGVæ•°æ®ç»“æ„
 public class AGVData
 {
     public int id;
@@ -203,16 +203,16 @@ public class AGVData
     public Queue<TaskCommand> taskQueue;
 }
 
-// ÈÎÎñÃüÁî
+// ä»»åŠ¡å‘½ä»¤
 public struct TaskCommand
 {
     public TaskType type;
     public Vector3 targetPosition;
-    public List<Vector3> path; // Â·¾¶µã
+    public List<Vector3> path; // è·¯å¾„ç‚¹
     public bool isPriority;
 }
 
-// ÈÎÎñÀàĞÍÃ¶¾Ù
+// ä»»åŠ¡ç±»å‹æšä¸¾
 public enum TaskType
 {
     Idle,
