@@ -33,7 +33,7 @@ public class AGVBatterySystem : MonoBehaviour
 
     // 当前电量状态
     private float currentBattery;
-    private bool isCharging = false;
+    private bool isCharging ;
 
     // 关联的移动系统
     private SmoothObjectSpawner.MovingObject movingObject;
@@ -41,6 +41,8 @@ public class AGVBatterySystem : MonoBehaviour
     // 用于绘制充电范围的材质
     public Material chargingRangeMaterial;
 
+    private float spawnTimerS=0;
+    private float spawnIntervalS=5;
     void Start()
     {
         // 初始化电量
@@ -48,11 +50,11 @@ public class AGVBatterySystem : MonoBehaviour
 
         Debug.Log($"Start: movingObject.obj is {movingObject.obj != null}");
 
-        if (movingObject.obj == null)
+       /* if (movingObject.obj == null)
         {
             Debug.LogError("未找到关联的移动对象组件!");
         }
-
+*/
         // 初始化UI
         UpdateBatteryUI();
     }
@@ -103,18 +105,25 @@ public class AGVBatterySystem : MonoBehaviour
     // 检查充电状态
     private void CheckChargingStatus()
     {
-        isCharging = false;
+        
 
-        foreach (var station in chargingStations)
+        spawnTimerS-=Time.deltaTime;
+        
+        if (spawnTimerS <= -spawnIntervalS)
         {
-            float distance = Vector3.Distance(transform.position, station.position);
-
-            if (distance < chargingDistanceThreshold)
-            {
-                isCharging = true;
-                break;
-            }
+           
+            spawnTimerS = spawnIntervalS; // 重置计时器
         }
+        if (spawnTimerS <= 0)
+        {
+            isCharging = false;
+        }
+        if (spawnTimerS >= 0f)
+        {
+            isCharging = true;
+           
+        }
+        
     }
 
     // 更新电池UI

@@ -22,13 +22,14 @@ public class SmoothObjectSpawner : MonoBehaviour
     public float spawnInterval = 1f;
     
     // 用于跟踪所有生成的对象及其状态
-    private List<MovingObject> activeObjects = new List<MovingObject>();
+    public List<MovingObject> activeObjects = new List<MovingObject>();
     private float spawnTimer; // 生成计时器
     
     // 初始化
     private void Start()
     {
         spawnTimer = spawnInterval; // 立即开始生成
+        SpawnAndMoveObject();
     }
     
     private void Update()
