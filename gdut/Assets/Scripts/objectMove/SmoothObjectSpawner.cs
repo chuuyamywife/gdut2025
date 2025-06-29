@@ -101,6 +101,13 @@ public class SmoothObjectSpawner : MonoBehaviour
         
         // 实例化预制体
         GameObject newObj = Instantiate(prefab, spawnTransform.position, spawnTransform.rotation);
+
+        // 添加电量系统组件
+        AGVBatterySystem batterySystem = newObj.GetComponent<AGVBatterySystem>();
+        if (batterySystem == null)
+        {
+            batterySystem = newObj.AddComponent<AGVBatterySystem>();
+        } 
         
         // 创建移动状态对象
         MovingObject movingObj = new MovingObject()
@@ -108,9 +115,21 @@ public class SmoothObjectSpawner : MonoBehaviour
             obj = newObj,
             currentPointIndex = 0,
             moveTimer = 0f,
-            startPosition = spawnTransform.position
+            startPosition = spawnTransform.position,
+            isMoving = true,
+            battery = batterySystem
         };
-        
+
+        if (batterySystem != null)
+        {
+            // 设置 AGVBatterySystem 中的 movingObject 引用
+            batterySystem.SetMovingObject(movingObj);
+        }
+        else
+        {
+            Debug.LogError("无法添加或获取 AGVBatterySystem 组件！");
+        }
+
         // 添加到活动列表
         activeObjects.Add(movingObj);
     }
@@ -146,7 +165,10 @@ public class SmoothObjectSpawner : MonoBehaviour
             targetPoint.position, 
             smoothT
         );
-        
+
+        // 更新移动状态
+        movingObj.isMoving = (t < 1f);
+
         // 检查是否到达目标点
         if (movingObj.moveTimer >= moveDurationPerPoint)
         {
@@ -173,12 +195,14 @@ public class SmoothObjectSpawner : MonoBehaviour
     }
     
     // 移动对象的状态结构
-    private struct MovingObject
+    public struct MovingObject
     {
         public GameObject obj;           // 对象实例
         public Vector3 startPosition;     // 当前段移动的起始位置
         public int currentPointIndex;     // 当前目标路径点索引
         public float moveTimer;           // 移动计时器
+        public bool isMoving;             // 是否正在移动
+        public AGVBatterySystem battery;  // 电量系统组件
     }
     
     // 当脚本被禁用或销毁时清理所有对象
