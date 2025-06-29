@@ -358,7 +358,7 @@ GameObject:
   m_Component:
   - component: {fileID: 590437217}
   m_Layer: 0
-  m_Name: "\u573A\u666F"
+  m_Name: work
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -459,7 +459,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: df284eddb6398f2459b693752470fd53,
         type: 3}
       propertyPath: m_Name
-      value: "\u7535\u68AF2"
+      value: lift2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -486,7 +486,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 44cbea998ea1f864eb33c8e657c2c39d, type: 3}
       propertyPath: m_Name
-      value: "\u8D27\u67B6"
+      value: shelf
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 44cbea998ea1f864eb33c8e657c2c39d, type: 3}
       propertyPath: m_LocalScale.x
@@ -764,7 +764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1109768394089260, guid: 22a46040bf600044bbf59817f7a7bf0c, type: 3}
       propertyPath: m_Name
-      value: "\u4ED3\u5E93"
+      value: warehouse
       objectReference: {fileID: 0}
     - target: {fileID: 1109768394089260, guid: 22a46040bf600044bbf59817f7a7bf0c, type: 3}
       propertyPath: m_IsActive
@@ -976,7 +976,7 @@ GameObject:
   m_Component:
   - component: {fileID: 543450651677867801}
   m_Layer: 0
-  m_Name: "\u7535\u68AF1"
+  m_Name: lift1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
