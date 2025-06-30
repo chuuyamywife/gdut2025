@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8650396192125737826}
   - component: {fileID: 7441820388741130006}
   - component: {fileID: 772311104545080868}
+  - component: {fileID: 4859266977959194921}
   m_Layer: 0
   m_Name: AGV
   m_TagString: Untagged
@@ -80,6 +81,22 @@ MonoBehaviour:
   batteryText: {fileID: 0}
   chargingStations: []
   chargingDistanceThreshold: 1
+--- !u!114 &4859266977959194921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2382421259861536726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a374b364a6bf504469f89a0c7679f678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentStatus: 0
+  normalMaterial: {fileID: 2100000, guid: ce5f7d8282291f949ac664ee8046487a, type: 2}
+  chargingMaterial: {fileID: 2100000, guid: 268544b86cbf14041b5b88a6cf0f0585, type: 2}
+  malfunctionMaterial: {fileID: 2100000, guid: ad945ff7b1df1a7479dd70548c6ca9b9, type: 2}
 --- !u!1 &4623722701658970184
 GameObject:
   m_ObjectHideFlags: 0

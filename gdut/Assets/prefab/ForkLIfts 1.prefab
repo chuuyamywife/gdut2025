@@ -106,6 +106,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Forklift
       objectReference: {fileID: 0}
+    - target: {fileID: 1165923690563524698, guid: 1ca12a8057ea70f4cb7ca2c0e0136b1b,
+        type: 3}
+      propertyPath: m_Lightmapping
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1693527314879803438, guid: 1ca12a8057ea70f4cb7ca2c0e0136b1b,
         type: 3}
       propertyPath: m_Lightmapping
