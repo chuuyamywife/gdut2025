@@ -183,8 +183,22 @@ public class SmoothObjectSpawner : MonoBehaviour
             
             // 更新起始位置
             movingObj.startPosition = targetPoint.position;
-            
-            // 检查是否是最后一个点
+
+            /*if(dianliang<40&&movingObj.currentPointIndex < movePoints.Count)//电量小于40并且不在充电站
+            {
+                movingObj.currentPointIndex=movePoints.Count-1;
+
+            }
+            if(movingObj.currentPointIndex >= movePoints.Count&&diangiang!=100)//在充电桩，电量不满
+            {
+                  moveDurationPerPoint = 99999;
+            }
+            if(movingObj.currentPointIndex >= movePoints.Count&&diangiang==100)//在充电桩，电量满
+            {
+                  moveDurationPerPoint =5 ;
+                  movingObj.currentPointIndex=0;
+            }*/
+            // 检查是否在充电桩
             if (movingObj.currentPointIndex >= movePoints.Count)
             {
                 movingObj.currentPointIndex=0;
