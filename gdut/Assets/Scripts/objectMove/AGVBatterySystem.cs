@@ -26,6 +26,10 @@ public class AGVBatterySystem : MonoBehaviour
     public Color lowBatteryColor = Color.red;
     public TextMeshProUGUI batteryText;     // 电量百分比文本
 
+    [Header("电池百分比文字前置设置")]
+    [Tooltip("显示在电量百分比前的文本")]
+    public string customTextPrefix = "Battery1";
+
     [Header("充电站设置")]
     public List<Transform> chargingStations = new List<Transform>();
     [Tooltip("进入充电站的距离阈值")]
@@ -146,7 +150,7 @@ public class AGVBatterySystem : MonoBehaviour
 
         if (batteryText != null)
         {
-            batteryText.text = $"{currentBattery:F0}%";
+            batteryText.text = $"{customTextPrefix}{currentBattery:F0}%";
         }
     }
 
