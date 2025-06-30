@@ -5,7 +5,7 @@ using UnityEngine;
 public class SmoothObjectSpawner : MonoBehaviour
 {
     [Header("生成设置")]
-    public GameObject prefab; // 要生成的预制体
+    public GameObject car; // 要生成的预制体
     public Transform spawnTransform; // 生成位置
     
     [Header("移动路径")]
@@ -24,12 +24,12 @@ public class SmoothObjectSpawner : MonoBehaviour
     // 用于跟踪所有生成的对象及其状态
     public List<MovingObject> activeObjects = new List<MovingObject>();
     private float spawnTimer; // 生成计时器
-    
     // 初始化
     private void Start()
     {
         spawnTimer = spawnInterval; // 立即开始生成
         SpawnAndMoveObject();
+
     }
     
     private void Update()
@@ -79,12 +79,7 @@ public class SmoothObjectSpawner : MonoBehaviour
     // 公共方法：生成并开始移动对象
     public void SpawnAndMoveObject()
     {
-        // 检查预制体是否设置
-        if (prefab == null)
-        {
-            Debug.LogWarning("未设置预制体，无法生成对象！");
-            return;
-        }
+
         
         // 检查生成位置是否设置
         if (spawnTransform == null)
@@ -101,19 +96,19 @@ public class SmoothObjectSpawner : MonoBehaviour
         }
         
         // 实例化预制体
-        GameObject newObj = Instantiate(prefab, spawnTransform.position, spawnTransform.rotation);
+       
 
         // 添加电量系统组件
-        AGVBatterySystem batterySystem = newObj.GetComponent<AGVBatterySystem>();
+        AGVBatterySystem batterySystem = car.GetComponent<AGVBatterySystem>();
         if (batterySystem == null)
         {
-            batterySystem = newObj.AddComponent<AGVBatterySystem>();
+            batterySystem = car.AddComponent<AGVBatterySystem>();
         } 
         
         // 创建移动状态对象
         MovingObject movingObj = new MovingObject()
         {
-            obj = newObj,
+            obj = car,
             currentPointIndex = 0,
             moveTimer = 0f,
             startPosition = spawnTransform.position,
@@ -132,7 +127,13 @@ public class SmoothObjectSpawner : MonoBehaviour
         }
 
         // 添加到活动列表
-        activeObjects.Add(movingObj);
+        //最多一辆车
+        if(activeObjects.Count<=0)
+        {
+
+            activeObjects.Add(movingObj);
+        }
+
     }
     
     // 更新对象移动，返回true表示对象已完成移动并销毁
@@ -186,9 +187,8 @@ public class SmoothObjectSpawner : MonoBehaviour
             // 检查是否是最后一个点
             if (movingObj.currentPointIndex >= movePoints.Count)
             {
-                // 立即销毁对象
-                Destroy(movingObj.obj);
-                return true;
+                movingObj.currentPointIndex=0;
+              
             }
         }
         
