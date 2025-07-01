@@ -42,6 +42,9 @@ public class AGVBatterySystem : MonoBehaviour
     // 关联的移动系统
     private SmoothObjectSpawner.MovingObject movingObject;
 
+    public GameObject car;
+
+    private StatusMaterialController statusMaterialController;
     // 用于绘制充电范围的材质
     public Material chargingRangeMaterial;
 
@@ -51,7 +54,11 @@ public class AGVBatterySystem : MonoBehaviour
     {
         // 初始化电量
         currentBattery = initialBattery;
-
+        if (car != null)
+        {
+            statusMaterialController = car.GetComponent<StatusMaterialController>();
+        }
+        
         Debug.Log($"Start: movingObject.obj is {movingObject.obj != null}");
 
        /* if (movingObject.obj == null)
@@ -87,6 +94,11 @@ public class AGVBatterySystem : MonoBehaviour
             // 充电逻辑
             currentBattery += chargingRate * Time.deltaTime;
             currentBattery = Mathf.Clamp(currentBattery, 0, 100);
+            if (statusMaterialController != null)
+            {
+                statusMaterialController.SetCharging();
+            }
+           
         }
         else
         {
@@ -94,6 +106,10 @@ public class AGVBatterySystem : MonoBehaviour
             float drainRate = movingObject.isMoving ? drainRateWhileMoving : drainRateWhileIdle;
             currentBattery -= drainRate * Time.deltaTime;
             currentBattery = Mathf.Clamp(currentBattery, 0, 100);
+            if (statusMaterialController != null)
+            {
+                statusMaterialController.SetNormal();
+            }
         }
 
         // 更新UI
@@ -103,6 +119,11 @@ public class AGVBatterySystem : MonoBehaviour
         if (currentBattery < lowBatteryThreshold && !isCharging)
         {
             Debug.LogWarning($"AGV电量低: {currentBattery:F1}%");
+            if (statusMaterialController != null)
+            {
+                statusMaterialController.SetMalfunction();
+            }
+            
         }
     }
 
